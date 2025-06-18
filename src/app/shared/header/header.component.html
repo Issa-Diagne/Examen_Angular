@@ -14,11 +14,12 @@
           <i class="fas fa-users"></i>
           <span>Clients</span>
         </a>
-        <a href="#" 
-           class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center space-x-2">
-          <i class="fas fa-chart-bar"></i>
-          <span>Statistiques</span>
-        </a>
+        <a [routerLink]="['/clients', 1, 'dettes']" 
+   class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center space-x-2">
+  <i class="fas fa-chart-bar"></i>
+  <span>Dettes</span>
+</a>
+
       </div>
       
       <div class="md:hidden">

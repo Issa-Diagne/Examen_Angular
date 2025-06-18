@@ -27,5 +27,12 @@ export const routes: Routes = [
     path: 'dettes/:id/paiements', 
     loadComponent: () => import('./components/paiement-list/paiement-list.component').then(m => m.PaiementListComponent)
   },
-  { path: '**', redirectTo: '/clients' }
+  { path: '**', redirectTo: '/clients' },
+  { 
+  path: 'clients/:id/dettes', 
+  loadComponent: () => import('./components/dette-list/dette-list.component').then(m => m.DetteListComponent)
+}
+
+
+
 ];
