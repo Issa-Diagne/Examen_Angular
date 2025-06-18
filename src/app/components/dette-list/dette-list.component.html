@@ -1,0 +1,144 @@
+<div class="max-w-7xl mx-auto">
+  <div class="mb-6">
+    <button 
+      (click)="goBack()"
+      class="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-300 mb-4">
+      <i class="fas fa-arrow-left mr-2"></i>
+      Retour aux détails du client
+    </button>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold text-white flex items-center">
+            <i class="fas fa-file-invoice-dollar mr-3"></i>
+            Dettes
+          </h2>
+          <p *ngIf="client" class="text-purple-100 mt-1">
+            Client: {{ client.nom }}
+          </p>
+        </div>
+        <button 
+          (click)="goToAddDette()"
+          class="bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors duration-300 flex items-center space-x-2">
+          <i class="fas fa-plus"></i>
+          <span>Nouvelle Dette</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="bg-gray-50 px-6 py-4 border-b">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-file-invoice text-red-600"></i>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Total des dettes</p>
+            <p class="text-lg font-bold text-gray-800">{{ getTotalDettes() | number:'1.0-0' }} FCFA</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-check-circle text-green-600"></i>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Total payé</p>
+            <p class="text-lg font-bold text-gray-800">{{ getTotalPaye() | number:'1.0-0' }} FCFA</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-clock text-orange-600"></i>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Reste à payer</p>
+            <p class="text-lg font-bold text-gray-800">{{ getTotalRestant() | number:'1.0-0' }} FCFA</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+    </div>
+
+    <!-- Liste des dettes -->
+    <div *ngIf="!loading" class="p-6">
+      <div *ngIf="dettes.length === 0" class="text-center py-12">
+        <i class="fas fa-file-invoice-dollar text-gray-400 text-6xl mb-4"></i>
+        <p class="text-gray-500 text-lg mb-4">Aucune dette trouvée</p>
+        <button 
+          (click)="goToAddDette()"
+          class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+          Ajouter la première dette
+        </button>
+      </div>
+      
+      <div *ngIf="dettes.length > 0" class="space-y-4">
+        <div *ngFor="let dette of dettes" 
+             class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                  <i class="fas fa-receipt text-white"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-800">
+                    {{ dette.montantDette | number:'1.0-0' }} FCFA
+                  </h3>
+                  <p class="text-sm text-gray-500">{{ dette.date | date:'dd/MM/yyyy' }}</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center space-x-3">
+                <span class="px-3 py-1 rounded-full text-xs font-medium"
+                      [class]="getStatusClass(dette)">
+                  {{ getDetteStatus(dette) }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div class="text-center p-3 bg-gray-50 rounded-lg">
+                <p class="text-sm text-gray-500">Montant Dette</p>
+                <p class="text-lg font-bold text-gray-800">{{ dette.montantDette | number:'1.0-0' }}</p>
+              </div>
+              <div class="text-center p-3 bg-green-50 rounded-lg">
+                <p class="text-sm text-gray-500">Montant Payé</p>
+                <p class="text-lg font-bold text-green-600">{{ dette.montantPaye | number:'1.0-0' }}</p>
+              </div>
+              <div class="text-center p-3 bg-orange-50 rounded-lg">
+                <p class="text-sm text-gray-500">Reste à Payer</p>
+                <p class="text-lg font-bold text-orange-600">{{ dette.montantRestant | number:'1.0-0' }}</p>
+              </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+              <button 
+                (click)="viewPaiements(dette.id!)"
+                class="px-4 py-2 text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-50 transition-colors duration-300 flex items-center space-x-2">
+                <i class="fas fa-eye"></i>
+                <span>Voir paiements</span>
+              </button>
+              <button 
+                *ngIf="dette.montantRestant > 0"
+                (click)="addPaiement(dette.id!)"
+                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300 flex items-center space-x-2">
+                <i class="fas fa-plus"></i>
+                <span>Ajouter paiement</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

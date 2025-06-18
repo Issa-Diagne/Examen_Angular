@@ -1,0 +1,31 @@
+<header class="bg-gradient-to-r from-blue-600 to-purple-700 shadow-lg">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="text-white text-2xl font-bold">
+          <i class="fas fa-money-bill-wave mr-2"></i>
+          Gestion Dettes
+        </div>
+      </div>
+      
+      <div class="hidden md:flex items-center space-x-6">
+        <a routerLink="/clients" 
+           class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center space-x-2">
+          <i class="fas fa-users"></i>
+          <span>Clients</span>
+        </a>
+        <a href="#" 
+           class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center space-x-2">
+          <i class="fas fa-chart-bar"></i>
+          <span>Statistiques</span>
+        </a>
+      </div>
+      
+      <div class="md:hidden">
+        <button class="text-white hover:text-blue-200">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
